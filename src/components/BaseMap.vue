@@ -1,45 +1,8 @@
 <script setup>
 import { Map, NavigationControl } from 'maplibre-gl';
 import { shallowRef, onMounted, onUnmounted, markRaw, watch, ref, reactive, computed } from 'vue';
-import { store } from '../store';
+import { store, data_dict } from '../store';
 import circle from '@turf/circle';
-
-// Palette from https://colorhunt.co/palette/4205167d1935b42b51e63e6d
-const data_dict = reactive({
-    'humps': {  'name': 'humps', 
-                'url': new URL('../assets/data/humps.geojson', import.meta.url).href, 
-                'colors': 'rgba(180, 43, 81, 1)',
-                'store': computed(() => store.showHumps)},
-    'marilyns': {   'name': 'marilyns', 
-                    'url': new URL('../assets/data/marilyns.geojson', import.meta.url).href, 
-                    'colors': 'rgba(230, 62, 109, 1)',
-                    'store': computed(() => store.showMarilyns)},
-    'grahams': {    'name': 'grahams', 
-                    'url': new URL('../assets/data/grahams.geojson', import.meta.url).href, 
-                    'colors': 'rgba(255, 122, 158, 1)',
-                    'store': computed(() => store.showGrahams)},
-    'grahamTops': { 'name': 'grahamTops', 
-                    'url': new URL('../assets/data/graham_top.geojson', import.meta.url).href, 
-                    'colors': 'rgba(255, 142, 179, 1)',
-                    'store': computed(() => store.showGrahamTops)},
-    'corbetts': {   'name': 'corbetts', 
-                    'url': new URL('../assets/data/corbetts.geojson', import.meta.url).href, 
-                    'colors': 'rgba(255, 81, 137, 1)',
-                    'store': computed(() => store.showCorbetts)},
-    'corbettTops': {    'name': 'corbettTops', 
-                        'url': new URL('../assets/data/corbett_top.geojson', import.meta.url).href, 
-                        'colors': 'rgba(255, 101, 158, 1)',
-                        'store': computed(() => store.showCorbettTops)},
-    'munros': { 'name': 'munros', 
-                'url': new URL('../assets/data/munros.geojson', import.meta.url).href,
-                'colors': 'rgba(66, 5, 22, 1)',
-                'store': computed(() => store.showMunros)},
-    'munroTops': {  'name': 'munroTops',
-                    'url': new URL('../assets/data/munro_tops.geojson', import.meta.url).href, 
-                    'colors': 'rgba(125, 25, 53, 1)',
-                    'store': computed(() => store.showMunroTops)},
-});
-
 
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
@@ -163,10 +126,6 @@ const initializeHills = (hillType) => {
                 hill_bagging: e.features[0].properties['Hill-bagging'],
             }
         }
-        else {
-            // map.value.getCanvas().style.cursor = 'drag';
-            console.log('Leaving feature');
-        }
     });
     map.value.on('mouseenter', hillType + '-point', () => {
         map.value.getCanvas().style.cursor = 'pointer';
@@ -175,7 +134,6 @@ const initializeHills = (hillType) => {
         map.value.getCanvas().style.cursor = '';
     });
     map.value.on('click', hillType + '-point', (e) => {
-        console.log('Clicked on ' + store.mountainInfo.name);
         if (store.showIsolation) {
             drawIsolation(e.features[0].geometry.coordinates);
         }
@@ -230,7 +188,8 @@ onMounted(() => {
             source: 'isolation',
             paint: {
                 "fill-color": "#8CCFFF",
-                "fill-opacity": 0.5,
+                "fill-opacity": 0.3,
+                "fill-outline-color": "#FFFFFF",
             },
             layout: {
                 visibility: 'none'
@@ -276,7 +235,7 @@ onUnmounted(() => {
 .attribution-link {
     font-size: 14px;
     text-decoration: none;
-    color: rgba(19, 32, 67, 1);
+    color: rgba(19, 32, 67, 0.9);
     padding-left: 5px;
     padding-right: 5px;
     transition: 0.5s ease all;

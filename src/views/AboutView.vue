@@ -15,7 +15,10 @@ onMounted(async () => {
         <div class="about-content">
             <h3> About </h3>
             <p>
-                This is a website for viewing mountains in the UK. It uses data from <a href="https://www.hill-bagging.co.uk/" target="_blank">hill-bagging.co.uk</a> to display mountains on a map.    
+                This website is a small personal project for learning VueJS. 
+                It shows Scottish and British mountains by visualizing data from <a href="https://www.hills-database.co.uk" target="_blank">hills-database.co.uk</a>
+                on a <a href="https://www.maptiler.com" target="_blank">maptiler.com</a>-based map using <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">maplibre-gl-js</a>.
+                Stats visualisations are done with <a href="https://d3js.org">d3js</a>.
             </p>
 
             <h3> Hill types </h3>
@@ -31,9 +34,14 @@ onMounted(async () => {
             
             <h3> Data </h3>
             <p>
-                All data stems from the wonderful resource <a href="https://www.hills-database.co.uk" target="_blank">hills-database.co.uk</a>.
-                The data was then processed using Python and the <a href="https://pandas.pydata.org/" target="_blank">pandas</a> library.
-                
+                All data stems from <a href="https://www.hills-database.co.uk" target="_blank">hills-database.co.uk</a>.
+                Data was processed using the <a href="https://pandas.pydata.org/" target="_blank">pandas</a> library.
+                All code of the site is available on <a href="https://github.com/matthiasblanke/MunroStats" target="_blank">github</a>.  
+            </p>
+
+            <h3> Contact </h3>
+            <p>
+                If you have any questions or feedback, please contact me <a href="mailto:munrostats@jongl.email">here</a>.
             </p>
         </div>
     </div>
@@ -88,9 +96,18 @@ onMounted(async () => {
     /* text-align-last: left; */
 }
 
-.about h3 {
+.about-content h3 {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.about-content a {
+    color: var(--blue-dark);
+    text-decoration: unterline;
+}
+
+.about-content a:hover {
+    text-decoration: none;
 }
 
 </style>

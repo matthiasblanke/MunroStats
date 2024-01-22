@@ -1,39 +1,60 @@
 <script setup>
 import OptionsPanel from '../components/OptionsPanel.vue';
 import ScatterChart from '../components/ScatterChart.vue';
-import { ref } from 'vue';
-import { onMounted } from 'vue';
-import { store } from '../store.js';
+import { ref, onMounted, watch } from 'vue';
+import { store, data_dict } from '../store.js';
 
-const data = ref(null);
+let data = null;
+const selected_data = ref([]);
 const yKey = ref('Metres');
 const xKey = ref('Drop');
 const itemKey = ref('Number');
 
 onMounted(async () => {
-    data.value = await store.getMunros();
+    data = await store.getMunros();
+
+    // Update the map to show a kind of mountain or not or not
+    for (const hillType in data_dict) {
+        updateStat(data_dict[hillType]['shortName'], data_dict[hillType]['store']);
+        watch(() => data_dict[hillType]['store'],
+            () => {
+                updateStat(data_dict[hillType]['shortName'], data_dict[hillType]['store']);
+            }
+        )
+    }
 });
 
-</script>
+const updateStat = (hillType, addOrRemove) => {
+    if (addOrRemove) {
+        selected_data.value = selected_data.value.concat(data.filter((item) => {
+            return item['class'].includes(hillType);
+        }));
+    } else {
+        selected_data.value = selected_data.value.filter((item) => {
+            return !item['class'].includes(hillType);
+        });
+    }
+}
 
+</script>
+ 
 <template>
     <div class='stats-container'>
-        <div class='graph-options'>
-            <select class='keySelect' id='xKeySelect' v-model='xKey'>
-                <option value='y' selected>No Key</option>
-                <option value='Drop'>Drop</option>
-            </select>
-            {{ xKey }}
-            <select class='keySelect' id='yKeySelect' v-model='yKey'>
-                <option value='Metres' selected>Metres</option>
-                <option value='Feet'>Feet</option>
-            </select>
-            {{ yKey }}
+        <div class="graph-container">
+            <ScatterChart :title='"Test Scatter"' :xKey='xKey' :yKey='yKey' :data='selected_data' 
+                :itemKey='itemKey' v-if="selected_data != null"/>
+            <div class='graph-options'>
+                
+                <select class='keySelect' id='xKeySelect' v-model='xKey'>
+                    <option value='Random' selected>Random</option>
+                    <option value='Drop'>Drop</option>
+                </select>
+                <select class='keySelect' id='yKeySelect' v-model='yKey'>
+                    <option value='Metres' selected>Metres</option>
+                    <option value='Feet'>Feet</option>
+                </select>
+            </div>
         </div>
-
-        <ScatterChart :title='"Test Scatter"' :xKey='xKey' :yKey='yKey' :data='data' 
-            :itemKey='itemKey' v-if="data != null"/>
-
     </div>
     <OptionsPanel :showOptions="true"/>
 </template>
@@ -41,37 +62,52 @@ onMounted(async () => {
 <style scoped>
 
 .graph-options {
-    position: fixed;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: center;
+    align-items: space-between;
     background-color: rgba(255, 255, 255, 0);
     width: 200px;
     padding: 10px;
     font-weight: lighter;
     font-size: 24;
-    right: 5%;
     z-index: 10;
 }
 
 .keySelect {
     background-color: whitesmoke;
     padding: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
     font-weight: lighter;
-    font-size: 16;
+    font-size: 16px;
+    border: 1px solid rgba(10, 10, 10, 0);
+    transition: 0.5s ease border;
+}
+
+.keySelect:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    border: 1px solid var(--blue-dark);
+}
+
+.graph-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: 100%;
 }
 
 .stats-container {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     align-items: center;
     width: 100vw;
     height: 100vh;
     background-color: whitesmoke;
-    padding-bottom: 40px;
-    padding-top: 80px;
 }
 
 .line {
@@ -89,4 +125,29 @@ line:hover {
     stroke: red;
     stroke-width: 0.1px;
 }
+
+@media only screen and (max-width: 1800px) {
+    .graph-container {
+        width: 75%;
+    }
+}
+
+@media only screen and (max-width: 1600px) {
+    .graph-container {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .graph-container {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .graph-container {
+        width: 90%;
+    }
+}
+
 </style>

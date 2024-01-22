@@ -24,7 +24,10 @@ const props = defineProps({
 });
 
 watch(() => props.data, () => {
-    AnimateResize();
+    /* wait shortly before redrawing */
+    setTimeout(() => {
+        AnimateResize();
+    }, 100);
 }, {deep: true});
 
 watch(() => [props.yKey, props.xKey], () => {
@@ -32,8 +35,8 @@ watch(() => [props.yKey, props.xKey], () => {
 });
 
 onMounted(() => {
-    svgWidth.value = document.getElementById("container").offsetWidth * 0.7;
-    svgHeight.value = document.getElementById("container").offsetHeight * 0.6;
+    svgWidth.value = document.getElementById("container").offsetWidth * 0.9;
+    svgHeight.value = document.getElementById("container").offsetHeight * 0.8;
     svg.value = d3.select('#container').select('svg');
 
     gy.value = svg.value.append("g")
@@ -45,23 +48,38 @@ onMounted(() => {
         .attr("class", "axis")
         .attr("transform", `translate(0,${svgHeight.value})`);
         
+
+    svg.value.append("text").attr("class", "xlabel").attr("text-anchor", "center")
+        .attr("x", svgWidth.value / 2).attr("y", svgHeight.value + 20).text(props.xKey);
+
+    svg.value.append("text").attr("class", "ylabel").attr("text-anchor", "center").attr("x", -svgHeight.value / 2).attr("y", -10)
+        .attr("transform", "rotate(-90)").text(props.yKey);
+
     AddResizeListener();
     AnimateResize();
 });
 
 const AnimateKeyChange = () => {
-    console.log("Animate key change");
-    console.log(dataMaxX.value);
-    console.log(xScale.value);
     gx.value.transition()
         .duration(750)
         .call(d3.axisTop(xScale.value))
         .attr("transform", `translate(0,${svgHeight.value})`);
-    console.log(gx.value)
     
     gy.value.transition()
         .duration(750)
         .call(d3.axisRight(yScale.value))
+
+    svg.value.selectAll(".xlabel").remove();
+    svg.value.append("text")
+        .attr("class", "xlabel")
+        .attr("text-anchor", "center")
+        .attr("x", svgWidth.value / 2)
+        .attr("y", svgHeight.value + 20)
+        .text(props.xKey);
+
+    svg.value.selectAll(".ylabel").remove();
+    svg.value.append("text").attr("class", "ylabel").attr("text-anchor", "center").attr("x", -svgHeight.value / 2).attr("y", -10)
+        .attr("transform", "rotate(-90)").text(props.yKey);
 };
 
 const AnimateResize = () => {
@@ -85,7 +103,7 @@ const AnimateResize = () => {
         .data(props.data)
         .transition()
         .delay((d, i) => {
-            return i * 3;
+            return i * 2 / props.data.length * 1000;
         })
         .duration(200)
         .attr("r", () => {
@@ -98,8 +116,8 @@ const AddResizeListener = () => {
     redrawToggle.value = false;
     setTimeout(() => {
         redrawToggle.value = true;
-        svgWidth.value = document.getElementById("container").offsetWidth * 0.7;
-        svgHeight.value = document.getElementById("container").offsetHeight * 0.6;
+        svgWidth.value = document.getElementById("container").offsetWidth * 0.9;
+        svgHeight.value = document.getElementById("container").offsetHeight * 0.8;
         AnimateResize();
     }, 600);
     });
@@ -131,14 +149,12 @@ const dataMinY = computed(() => {
 });
 
 const xScale = computed(() => {
-    console.log('Computing xScale');
     return scaleLinear()
         .rangeRound([0, svgWidth.value])
         .domain([dataMinX.value - 0.5, dataMaxX.value + 0.5]);
 });
 
 const yScale = computed(() => {
-    console.log('Computing yScale', dataMinY.value, dataMaxY.value);
     return scaleLinear()
         .rangeRound([svgHeight.value, 0])
         .domain([dataMinY.value - 0.05 * dataMinY.value, dataMaxY.value + 0.05 * dataMaxY.value]);
@@ -171,12 +187,6 @@ const popUpInfo = (item) => {
 
 
 <style scoped>
-
-.container {
-    display: flex;
-    width: 100%;
-}
-
 svg {
     /* background-color: rgb(229, 226, 226); */
     /* border: 1px solid black; */
@@ -196,15 +206,12 @@ svg {
 
 .svg-container {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    flex-direction: column;
-    flex: 1;
-    position: relative;
-    width: 50%;
+    width: 100%;
     height: 100%;
+    flex-direction: column;
     /* padding-bottom: 1%; */
     vertical-align: top;
-    overflow: hidden;
 }
 </style>

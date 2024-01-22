@@ -88,14 +88,16 @@ const checkWidth = () => {
                 <hr>
                 <h2> English Mountains </h2>
 
-                <div class="single-option">
-                    <ToggleSwitch v-model="store.showHumps"></ToggleSwitch>
-                    &nbsp;&nbsp;Humps
-                </div>
+                <div class="side-by-side">
+                    <div class="single-option">
+                        <ToggleSwitch v-model="store.showHumps"></ToggleSwitch>
+                        &nbsp;&nbsp;Humps
+                    </div>
 
-                <div class="single-option">
-                    <ToggleSwitch v-model="store.showMarilyns"></ToggleSwitch>
-                    &nbsp;&nbsp;Marilyns
+                    <div class="single-option">
+                        <ToggleSwitch v-model="store.showMarilyns"></ToggleSwitch>
+                        &nbsp;&nbsp;Marilyns
+                    </div>
                 </div>
 
                 <hr>
@@ -181,7 +183,7 @@ const checkWidth = () => {
     align-items: stretch;
     left: 2%;
     top: 2%;
-    width: 15%;
+    width: 18%;
 }
 
 .options-container {
@@ -223,21 +225,6 @@ const checkWidth = () => {
 
 .options-container:hover {
     border: 1px solid var(--blue-dark);
-}
-
-.menu {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    left: 2%;
-    top: 2%;
-    width: 15%;
-}
-
-.fade-menu-move {
-    transition: all 0.5s ease;
 }
 
 .fadein-enter-from,
