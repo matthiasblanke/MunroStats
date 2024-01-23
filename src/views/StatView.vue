@@ -15,23 +15,25 @@ onMounted(async () => {
 
     // Update the map to show a kind of mountain or not or not
     for (const hillType in data_dict) {
-        updateStat(data_dict[hillType]['shortName'], data_dict[hillType]['store']);
+        updateStat(hillType);
         watch(() => data_dict[hillType]['store'],
             () => {
-                updateStat(data_dict[hillType]['shortName'], data_dict[hillType]['store']);
+                updateStat(hillType);
             }
         )
     }
 });
 
-const updateStat = (hillType, addOrRemove) => {
+const updateStat = (hillType) => {
+    let sn = data_dict[hillType]['shortName']
+    let addOrRemove = data_dict[hillType]['store'];
     if (addOrRemove) {
         selected_data.value = selected_data.value.concat(data.filter((item) => {
-            return item['class'].includes(hillType);
+            return item['class'] == sn;
         }));
     } else {
         selected_data.value = selected_data.value.filter((item) => {
-            return !item['class'].includes(hillType);
+            return String(item['class']) != sn;
         });
     }
 }
@@ -44,15 +46,19 @@ const updateStat = (hillType, addOrRemove) => {
             <ScatterChart :title='"Test Scatter"' :xKey='xKey' :yKey='yKey' :data='selected_data' 
                 :itemKey='itemKey' v-if="selected_data != null"/>
             <div class='graph-options'>
-                
-                <select class='keySelect' id='xKeySelect' v-model='xKey'>
-                    <option value='Random' selected>Random</option>
-                    <option value='Drop'>Drop</option>
-                </select>
+                y-Axis
                 <select class='keySelect' id='yKeySelect' v-model='yKey'>
                     <option value='Metres' selected>Metres</option>
                     <option value='Feet'>Feet</option>
                 </select>
+                <div style='width: 50px;'></div>
+
+                <select class='keySelect' id='xKeySelect' v-model='xKey'>
+                    <option value='Random' selected>Random</option>
+                    <option value='Drop'>Drop</option>
+                </select>
+                x-Axis
+
             </div>
         </div>
     </div>
@@ -64,11 +70,11 @@ const updateStat = (hillType, addOrRemove) => {
 .graph-options {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: baseline;
     align-items: space-between;
     background-color: rgba(255, 255, 255, 0);
-    width: 200px;
     padding: 10px;
+    height: 20px;
     font-weight: lighter;
     font-size: 24;
     z-index: 10;
@@ -81,7 +87,8 @@ const updateStat = (hillType, addOrRemove) => {
     margin-left: 10px;
     font-weight: lighter;
     font-size: 16px;
-    border: 1px solid rgba(10, 10, 10, 0);
+    border: 1px solid rgba(68, 68, 68, 0);
+    box-shadow: 0px 5px 8px -5px var(--blue-light);
     transition: 0.5s ease border;
 }
 
@@ -108,22 +115,6 @@ const updateStat = (hillType, addOrRemove) => {
     width: 100vw;
     height: 100vh;
     background-color: whitesmoke;
-}
-
-.line {
-    stroke: black;
-    stroke-width: 0.08px;
-    fill: none;
-    /* fill: none; */
-}
-
-g {
-    transform: translate(0,0) scale(50);
-}
-
-line:hover {
-    stroke: red;
-    stroke-width: 0.1px;
 }
 
 @media only screen and (max-width: 1800px) {

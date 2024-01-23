@@ -4,14 +4,14 @@ import { scaleLinear } from "d3-scale";
 // import { axisTop, axisBottom } from "d3-axis";
 import { max, min } from "d3-array";
 import { selectAll } from "d3-selection";
-import { store } from "../store";
+import { store, data_dict } from "../store";
 import * as d3 from "d3";
 
 const svgWidth = ref(0);
 const svgHeight = ref(0);
 const redrawToggle = ref(true);
 const svg = ref(null);
-const radius = ref(5);
+const radius = ref(3);
 const gy = ref();
 const gx = ref();
 
@@ -24,7 +24,6 @@ const props = defineProps({
 });
 
 watch(() => props.data, () => {
-    /* wait shortly before redrawing */
     setTimeout(() => {
         AnimateResize();
     }, 100);
@@ -82,6 +81,10 @@ const AnimateKeyChange = () => {
         .attr("transform", "rotate(-90)").text(props.yKey);
 };
 
+function getKeyByShortName(object, value) {
+  return Object.keys(object).find(key => object[key]['shortName'] === value);
+}
+
 const AnimateResize = () => {
 
     svg.value = d3.select('#container').select('svg');
@@ -103,12 +106,14 @@ const AnimateResize = () => {
         .data(props.data)
         .transition()
         .delay((d, i) => {
-            return i * 2 / props.data.length * 1000;
+            return i * 3 / props.data.length * 1000;
         })
         .duration(200)
-        .attr("r", () => {
-            return radius.value;
-        });
+        .each(function(d) {
+            d3.select(this).attr("r", d.Metres / 200);
+            d3.select(this).attr("fill", data_dict[getKeyByShortName(data_dict, d.class)]['colors']);
+            d3.select(this).attr("stroke", 'black');
+        })
 };
 
 const AddResizeListener = () => {
@@ -122,7 +127,6 @@ const AddResizeListener = () => {
     }, 600);
     });
 };
-
 
 const dataMaxY = computed(() => {
     return max(props.data, d => {
@@ -188,15 +192,13 @@ const popUpInfo = (item) => {
 
 <style scoped>
 svg {
-    /* background-color: rgb(229, 226, 226); */
-    /* border: 1px solid black; */
     padding: 50px;
 }
 
 .scatter-points {
-    fill: var(--blue-light);
-    stroke: var(--blue-dark);
-    transition: cx 1.2s ease-in-out, cy 1.2s ease-in-out, r 0.3s ease-in-out;
+    /* fill: var(--blue-light); */
+    /* stroke: var(--blue-dark); */
+    transition: cx 1.2s ease-in-out, cy 1.2s ease-in-out, r 0.5s ease-in-out, fill 0.1s ease-in-out;
 }
 
 .scatter-points:hover {
@@ -211,7 +213,6 @@ svg {
     width: 100%;
     height: 100%;
     flex-direction: column;
-    /* padding-bottom: 1%; */
     vertical-align: top;
 }
 </style>
