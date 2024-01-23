@@ -21,7 +21,7 @@ import "d3";
                     Drop: {{ store.mountainInfo.drop }}
                 </p>
                 <p>
-                    <a :href="store.mountainInfo.hill_bagging">
+                    <a :href="store.mountainInfo.hill_bagging" target="_blank"> <!-- open in new tab -->
                         See on hill-bagging
                     </a>
                 </p>

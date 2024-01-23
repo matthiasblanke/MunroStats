@@ -109,10 +109,10 @@ const checkWidth = () => {
                         &nbsp;&nbsp;Show Info
                     </div>
 
-                    <div class="single-option">
+                    <!-- <div class="single-option">
                         <ToggleSwitch v-model="store.showIsolation"></ToggleSwitch>
                         &nbsp;&nbsp;Show Isolation
-                    </div>
+                    </div> -->
                 </div>
             </div> 
         </Transition>       
