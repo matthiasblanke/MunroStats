@@ -87,8 +87,7 @@ const updateStat = (hillType) => {
     margin-left: 10px;
     font-weight: lighter;
     font-size: 16px;
-    border: 1px solid rgba(68, 68, 68, 0);
-    box-shadow: 0px 5px 8px -5px var(--blue-light);
+    border: 1px solid var(--blue-light);
     transition: 0.5s ease border;
 }
 
