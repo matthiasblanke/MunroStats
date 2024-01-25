@@ -86,7 +86,7 @@ const checkWidth = () => {
                 </div>
 
                 <hr>
-                <h2> English Mountains </h2>
+                <h2> British Mountains </h2>
 
                 <div class="side-by-side">
                     <div class="single-option">
