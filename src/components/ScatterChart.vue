@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, watch, isRef } from "vue";
+import { computed, ref, onMounted, watch, onUnmounted } from "vue";
 import { scaleLinear } from "d3-scale";
 // import { axisTop, axisBottom } from "d3-axis";
 import { max, min } from "d3-array";
@@ -54,8 +54,22 @@ onMounted(() => {
     svg.value.append("text").attr("class", "ylabel").attr("text-anchor", "center").attr("x", -svgHeight.value / 2).attr("y", -10)
         .attr("transform", "rotate(-90)").text(props.yKey);
 
-    AddResizeListener();
+        window.addEventListener("resize", redraw_resize);
     AnimateResize();
+});
+
+const redraw_resize = () => {
+    redrawToggle.value = false;
+    setTimeout(() => {
+        redrawToggle.value = true;
+        svgWidth.value = document.getElementById("container").offsetWidth * 0.9;
+        svgHeight.value = document.getElementById("container").offsetHeight * 0.8;
+        AnimateResize();
+    }, 600);
+};
+
+onUnmounted(() => {
+    window.removeEventListener("resize", redraw_resize);
 });
 
 const AnimateKeyChange = () => {
@@ -114,18 +128,6 @@ const AnimateResize = () => {
             d3.select(this).attr("fill", data_dict[getKeyByShortName(data_dict, d.class)]['colors']);
             d3.select(this).attr("stroke", 'black');
         })
-};
-
-const AddResizeListener = () => {
-    window.addEventListener("resize", () => {
-    redrawToggle.value = false;
-    setTimeout(() => {
-        redrawToggle.value = true;
-        svgWidth.value = document.getElementById("container").offsetWidth * 0.9;
-        svgHeight.value = document.getElementById("container").offsetHeight * 0.8;
-        AnimateResize();
-    }, 600);
-    });
 };
 
 const dataMaxY = computed(() => {
@@ -214,5 +216,6 @@ svg {
     height: 100%;
     flex-direction: column;
     vertical-align: top;
+    overflow: hidden;
 }
 </style>

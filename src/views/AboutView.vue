@@ -15,33 +15,29 @@ onMounted(async () => {
         <div class="about-content">
             <h3> About </h3>
             <p>
-                This website is a small personal project for learning VueJS. 
-                It shows Scottish and British mountains by visualizing data from <a href="https://www.hills-database.co.uk" target="_blank">hills-database.co.uk</a>
+                This site is a small personal project for learning <a href="https://vuejs.org" target="_blank">vue.js</a>.
+                It shows Scottish (and British) mountains by visualizing data from <a href="https://www.hills-database.co.uk" target="_blank">hills-database.co.uk</a>
                 on a <a href="https://www.maptiler.com" target="_blank">maptiler.com</a>-based map using <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">maplibre-gl-js</a>.
                 Stats visualisations are done with <a href="https://d3js.org">d3js</a>.
             </p>
 
             <h3> Hill types </h3>
             <p>
-                The following hill types are displayed on the map:
-                <ul>
-                    <li> Munros </li>
-                    <li> Munro Tops </li>
-                    <li> Marilyns </li>
-                    <li> Humps </li>
-                </ul>
+                The map displays six Scottish hill types (Munros, Munro Tops, Corbetts, Corbett Tops, Grahams, Graham Tops) and two British hill types (Humps, Marilyns).
+                For a detailed explanation of hill types, please see <a href="https://www.hills-database.co.uk/database_notes.html#defs" target="_blank">here</a> or <a href="https://en.wikipedia.org/wiki/Lists_of_mountains_and_hills_in_the_British_Isles" target="_blank">here</a>.
+                In the stats, hills that are categorized as multiple classes are only shown in the highest class.
             </p>
             
             <h3> Data </h3>
             <p>
                 All data stems from <a href="https://www.hills-database.co.uk" target="_blank">hills-database.co.uk</a>.
-                Data was processed using the <a href="https://pandas.pydata.org/" target="_blank">pandas</a> library.
+                Data was processed using <a href="https://pandas.pydata.org/" target="_blank">pandas</a>.
                 All code of the site is available on <a href="https://github.com/matthiasblanke/MunroStats" target="_blank">github</a>.  
             </p>
 
             <h3> Contact </h3>
             <p>
-                If you have any questions or feedback, please contact me <a href="mailto:munrostats@jongl.email">here</a>.
+                If you have questions or feedback, please contact me via <a href="mailto:munrostats@jongl.email">mail</a>.
             </p>
         </div>
     </div>
@@ -67,9 +63,8 @@ onMounted(async () => {
     width: 100vw;
     height: 100vh;
     background-color: whitesmoke;
-    padding-bottom: 40px;
-    padding-top: 150px;
     font-weight: lighter;
+    overflow-y: scroll;
 }
 
 .about-content {
@@ -77,6 +72,8 @@ onMounted(async () => {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    padding-top: 100px;
+    padding-bottom: 100px;
     width: 80%;
     height: 100%;
     max-width: 800px;
@@ -88,12 +85,9 @@ onMounted(async () => {
     font-size: 16px;
     margin-left: 20px;
     margin-right: 20px;
-    /* Make text block */
     text-indent: 20px;
     text-align: left;
     text-justify: auto;
-    /* Left align text */
-    /* text-align-last: left; */
 }
 
 .about-content h3 {

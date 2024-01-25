@@ -32,16 +32,16 @@ const checkWidth = () => {
 
         <Transition name="fade-menu">
             <div class="menu-row">
-                <RouterLink to="/">
+                <RouterLink :to="{name: 'home'}">
                     <button class="header-button">Map</button>
                 </RouterLink>
-                <RouterLink to="/stats">
+                <RouterLink :to="{name: 'stats'}">
                     <button class="header-button">Stats</button>
                 </RouterLink>
-                <RouterLink to="/about">
+                <RouterLink :to="{name: 'about'}">
                     <button class="header-button">About</button>
                 </RouterLink>
-                <button class="header-button" @click="showOptions = !showOptions" v-if="smallScreen">Menu</button>
+                <button class="header-button" @click="showOptions = !showOptions" v-if="smallScreen">Options</button>
             </div>
         </Transition>
 
@@ -116,7 +116,7 @@ const checkWidth = () => {
                 </div>
             </div> 
         </Transition>       
-        <MountainInfoPanel v-show="showOptions"/>
+        <MountainInfoPanel v-show="showOptions" :smallScreen="smallScreen"/>
 
     </div>
 

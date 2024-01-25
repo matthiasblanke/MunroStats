@@ -2,11 +2,13 @@
 import { store } from '../store';
 import "d3";
 
+const props = defineProps(['smallScreen']);
+
 </script>
 
 <template>
     <Transition name="mountain-info-trans">
-        <div class="mountain-info" v-if="store.showInfo">
+        <div class="mountain-info" v-if="store.showInfo && !smallScreen">
             <div class="mountain-selected" v-if="store.mountainInfo.name">
                 <p>
                     <b>{{ store.mountainInfo.name }}</b>
@@ -31,6 +33,32 @@ import "d3";
             </div>
         </div>
     </Transition>
+    <!-- <Transition name="mountain-info-trans">
+        <div class="mountain-info" v-if="store.showInfo && smallScreen">
+            <div class="mountain-selected" v-if="store.mountainInfo.name">
+                <p>
+                    <b>{{ store.mountainInfo.name }}</b>
+                </p>
+                <p>
+                    {{ store.mountainInfo.height }} metres (<i>{{ store.mountainInfo.feet }} feet</i>)
+                </p>
+                <p>
+
+                </p>
+                <p>
+                    Drop: {{ store.mountainInfo.drop }}
+                </p>
+                <p>
+                    <a :href="store.mountainInfo.hill_bagging" target="_blank"> 
+                        See on hill-bagging
+                    </a>
+                </p>
+            </div>
+            <div class="nothing-selected" v-else>
+                Please select a mountain.
+            </div>
+        </div>
+    </Transition> -->
 </template>
 
 <style scoped>

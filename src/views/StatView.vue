@@ -103,7 +103,7 @@ const updateStat = (hillType) => {
     justify-content: space-between;
     align-items: center;
     width: 80%;
-    height: 100%;
+    height: 80%;
 }
 
 .stats-container {

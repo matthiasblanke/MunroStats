@@ -10,18 +10,18 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
-    }, 
-    {
-      path: '/home',
-      redirect: '/'
     },
     {
-      path: '/stats',
+      path: import.meta.env.BASE_URL + 'home',
+      redirect: import.meta.env.BASE_URL
+    },
+    {
+      path: import.meta.env.BASE_URL + 'stats',
       name: 'stats',
       component: StatView
     },
     {
-      path: '/about',
+      path: import.meta.env.BASE_URL + 'about',
       name: 'about',
       component: AboutView
     }
