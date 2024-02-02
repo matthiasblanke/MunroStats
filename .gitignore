@@ -27,6 +27,7 @@ coverage
 *.sw?
 
 dist/
+notebooks/
 
 .env
 .deployment_info

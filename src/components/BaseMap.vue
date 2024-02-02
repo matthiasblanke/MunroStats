@@ -34,14 +34,16 @@ watch(() => store.showIsolation, () => {
     }
 });
 
-const radius = 10; // kilometer
-var options = {
-    steps: 64,
-    units: "kilometers",
-};
-isolation.value = circle([-4.8171186447143555, 56.23679153954092], radius, options);
 
-const drawIsolation = (xy) => {
+
+const drawIsolation = (xy, iso_km) => {
+
+    const radius = iso_km; // kilometer
+    var options = {
+        steps: 64,
+        units: "kilometers",
+    };
+    isolation.value = circle([-4.8171186447143555, 56.23679153954092], radius, options);
 
     map.value.setLayoutProperty('isolation', 'visibility', 'visible');
 
@@ -110,7 +112,6 @@ const initializeHills = (hillType) => {
     );
     map.value.on('mousemove', hillType+'-point', (e) => {
         if (e.features.length > 0) {
-            
             hoveredHill.value = e.features[0].properties.Name;
             map.value.setFeatureState(
                 { source: hillType, id: hoveredHill.value },
@@ -132,8 +133,9 @@ const initializeHills = (hillType) => {
         map.value.getCanvas().style.cursor = '';
     });
     map.value.on('click', hillType + '-point', (e) => {
+        let iso = e.features[0].properties.isolation
         if (store.showIsolation) {
-            drawIsolation(e.features[0].geometry.coordinates);
+            drawIsolation(e.features[0].geometry.coordinates, iso);
         }
         map.value.flyTo({
             center: e.features[0].geometry.coordinates,
